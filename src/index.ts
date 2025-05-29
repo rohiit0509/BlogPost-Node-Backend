@@ -1,0 +1,71 @@
+import express from "express";
+import userRouter from "../routes/userRoute";
+import postRouter from "../routes/postRoute";
+import cookieParser from "cookie-parser";
+import { getData } from "../controllers/getData";
+import { sendData } from "../controllers/sendData";
+import { userValidator } from "../middleware/userValidator";
+import { upload } from "../multer/index";
+import { imageURl } from "../controllers/imageURl";
+import { fetchBlog } from "../controllers/fetchBlog";
+import { likeOnPost } from "../controllers/likeOnPost";
+import { getUserDetail } from "../controllers/getUserDetail";
+import { GetAllUsers } from "../controllers/getAllUsers";
+import { Conversation } from "../controllers/Conversation";
+import { GetConversation } from "../controllers/Conversation";
+import { Message } from "../controllers/Message";
+import { GetMessage } from "../controllers/Message";
+import cors from "cors";
+import http from "http";
+import { socketSetup } from "../socket"; // Import socket setup
+import { Server } from 'socket.io';
+
+const app = express();
+const server = http.createServer(app); // HTTP server to work with socket.io
+
+app.use(express.json());
+
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true,
+  optionSuccessStatus: 200
+};
+
+app.use(cookieParser());
+app.use(cors(corsOptions));
+
+// Socket setup
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    credentials: true,
+  },
+});
+
+// Call socket setup with io instance
+socketSetup(io);
+
+// Routes
+app.post('/conversation', Conversation);
+app.get('/getConversation/:userId', GetConversation);
+app.post('/message', Message);
+app.get('/getMessage/:conversationId', GetMessage);
+app.use(userRouter);
+app.use(postRouter);
+
+
+app.post('/sendData', upload.single('thumbnail'), userValidator, getData);
+app.post('/imageURl', upload.single('image'), imageURl);
+app.get('/getData', sendData);
+app.get('/fetchBlog/:title', fetchBlog);
+app.patch('/likeonpost', userValidator, likeOnPost);
+app.get('/getUserDetail', userValidator, getUserDetail);
+app.get('/getallusers', userValidator, GetAllUsers);
+
+// Start server
+const PORT = 9000;
+server.listen(PORT, () => {
+  console.log("Server running on port", PORT);
+});
+
+export default app;
