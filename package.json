@@ -2,11 +2,11 @@
   "name": "day2_ts",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "mocha --require ts-node/register ./test/*.test.ts",
     "build": "tsc",
-    "start": "npx nodemon"
+    "start": "node dist/index.js"
   },
   "keywords": [],
   "author": "",
