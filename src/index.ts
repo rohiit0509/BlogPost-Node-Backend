@@ -26,7 +26,7 @@ const server = http.createServer(app);
 app.use(express.json());
 
 const corsOptions = {
-  origin: 'https://blog-post-react-frontend-sigma.vercel.app/',
+  origin: 'https://blog-post-react-frontend-sigma.vercel.app',
   credentials: true,
   optionSuccessStatus: 200
 };
@@ -37,7 +37,7 @@ app.use(cors(corsOptions));
 // Socket setup
 const io = new Server(server, {
   cors: {
-    origin: "*",
+   origin: "https://blog-post-react-frontend-sigma.vercel.app",
     methods: ["GET", "POST", "PATCH"]
   }
 });
@@ -51,7 +51,6 @@ app.post('/message', Message);
 app.get('/getMessage/:conversationId', GetMessage);
 app.use(userRouter);
 app.use(postRouter);
-
 
 app.post('/sendData', upload.single('thumbnail'), userValidator, getData);
 app.post('/imageURl', upload.single('image'), imageURl);
