@@ -3,7 +3,7 @@ import { OtpModel } from "../models/user";
 import nodemailer from "nodemailer"
 import bcrypt from "bcrypt";
 import { Request, RequestHandler, Response } from "express";
-import "database";
+import "../database";
 import jwt from "jsonwebtoken"
 
 const mailer = (email, otp) => {
