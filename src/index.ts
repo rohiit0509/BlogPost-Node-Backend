@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import { getData } from "./controllers/getData";
 import { sendData } from "./controllers/sendData";
 import { userValidator } from "./middleware/userValidator";
-import { upload } from "./multer/index";
+import { upload } from "./config/multer/index";
 import { imageURl } from "./controllers/imageURl";
 import { fetchBlog } from "./controllers/fetchBlog";
 import { likeOnPost } from "./controllers/likeOnPost";
