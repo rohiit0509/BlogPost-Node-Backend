@@ -88,10 +88,11 @@ export const LoginRequest: RequestHandler = async (req, res) => {
     // Set cookie and send response
     res.cookie("userAuth", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Use secure in production
-      sameSite: "strict",
-      maxAge: 3600000 // 1 hour
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 3600000, // 1 hour
     });
+
 
     res.status(200).send({
       msg: "Logged in successfully",
