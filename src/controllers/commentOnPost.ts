@@ -1,15 +1,22 @@
-import { Request, Response } from "express";
+import { RequestHandler } from "express";
 import getDataModel from "../models/getData";
 
-export const CommentOnPost = async (req: Request, res: Response) => {
+export const CommentOnPost: RequestHandler = async (req, res) => {
   const { userId, comment } = req.body;
   const postId = req.params.id;
 
   try {
+    // Input validation
+    if (!postId || !userId || !comment) {
+      res.status(400).send({ msg: "Missing required fields" });
+      return;
+    }
+
     const post = await getDataModel.findById(postId);
 
     if (!post) {
-      return res.status(404).send("Post not found");
+      res.status(404).send({ msg: "Post not found" });
+      return;
     }
 
     const newComment = {
@@ -21,9 +28,13 @@ export const CommentOnPost = async (req: Request, res: Response) => {
     post.comments.push(newComment);
     await post.save();
 
-    return res.status(200).send({msg:"Comment added successfully"});
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error adding comment");
+    res.status(200).send({
+      msg: "Comment added successfully",
+      comment: newComment,
+      postId: post._id
+    });
+  } catch (err: any) {
+    console.error("Comment Error:", err);
+    res.status(500).send({ msg: "Error adding comment", error: err.message });
   }
 };

@@ -37,12 +37,11 @@ app.use(cors(corsOptions));
 // Socket setup
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
-    credentials: true,
-  },
+    origin: "*",
+    methods: ["GET", "POST", "PATCH"]
+  }
 });
 
-// Call socket setup with io instance
 socketSetup(io);
 
 // Routes

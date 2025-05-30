@@ -1,11 +1,18 @@
 import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
+
 const secretKey = "rohit123";
 
-export const userValidator = (req: Request, res: Response, next: NextFunction) => {
+export const userValidator = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   const token = req.cookies.userAuth;
+
   if (!token) {
-    return res.status(401).send("Access Denied");
+    res.status(401).send("Access Denied");
+    return;
   }
 
   try {
@@ -14,7 +21,7 @@ export const userValidator = (req: Request, res: Response, next: NextFunction) =
       throw new Error("Invalid Token");
     }
 
-    req.body.userId = verifyToken.id;
+    (req as any).userId = verifyToken.id;
     next();
   } catch (err: any) {
     res.status(400).send({ msg: err.message });

@@ -2,8 +2,8 @@ import User from "../models/user";
 import { OtpModel } from "../models/user";
 import nodemailer from "nodemailer"
 import bcrypt from "bcrypt";
-import { Request, Response } from "express";
-import "@database";
+import { Request, RequestHandler, Response } from "express";
+import "database";
 import jwt from "jsonwebtoken"
 
 const mailer = (email, otp) => {
@@ -31,14 +31,15 @@ const mailer = (email, otp) => {
 
 // SIGNUP REQUEST
 
-export const SignupRequest = async (req: Request, res: Response) => {
+export const SignupRequest: RequestHandler = async (req, res) => {
   const { email, password, phone, userName } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      return res.status(409).send({ msg: "Email already exists" });
+      res.status(409).send({ msg: "Email already exists" });
+      return; // Remove return value
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -50,7 +51,11 @@ export const SignupRequest = async (req: Request, res: Response) => {
       userProfile: `https://api.dicebear.com/7.x/fun-emoji/svg?seed=${userName}`
     });
 
-    res.status(201).send({ msg: "User created successfully", userId: newUser._id });
+    // Send response without returning it
+    res.status(201).send({
+      msg: "User created successfully",
+      userId: newUser._id
+    });
   } catch (error: any) {
     res.status(500).send({ msg: error.message });
   }
@@ -60,38 +65,44 @@ export const SignupRequest = async (req: Request, res: Response) => {
 const secretKey = "rohit123"
 
 // LOGIN REQUEST
-export const LoginRequest = async (req: Request, res: Response) => {
+export const LoginRequest: RequestHandler = async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const findUser = await User.findOne({ email });
 
     if (!findUser) {
-      return res.status(404).send({ msg: "User not found" });
+      res.status(404).send({ msg: "User not found" });
+      return;
     }
 
     const isPasswordCorrect = await bcrypt.compare(password, findUser.password);
     if (!isPasswordCorrect) {
-      return res.status(401).send({ msg: "Invalid credentials" });
+      res.status(401).send({ msg: "Invalid credentials" });
+      return;
     }
 
-    jwt.sign({ id: findUser.id }, secretKey, (err, token) => {
-      if (err) {
-        return res.status(500).send({ msg: "Error generating token" });
-      }
+    // Create JWT token
+    const token = jwt.sign({ id: findUser.id }, secretKey, { expiresIn: "1h" });
 
-      res.cookie("userAuth", token, { httpOnly: true });
-      res.status(200).send({
-        msg: "Logged in successfully",
-        token,
-        user: {
-          id: findUser._id,
-          email: findUser.email,
-          userName: findUser.userName,
-          phone: findUser.phone,
-          userProfile: findUser.userProfile,
-        },
-      });
+    // Set cookie and send response
+    res.cookie("userAuth", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Use secure in production
+      sameSite: "strict",
+      maxAge: 3600000 // 1 hour
+    });
+
+    res.status(200).send({
+      msg: "Logged in successfully",
+      token,
+      user: {
+        id: findUser._id,
+        email: findUser.email,
+        userName: findUser.userName,
+        phone: findUser.phone,
+        userProfile: findUser.userProfile,
+      },
     });
   } catch (err: any) {
     res.status(500).send({ msg: err.message });
