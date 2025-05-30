@@ -1,6 +1,5 @@
 import { Response, Request } from "express";
 import ConversationModel from "../models/Conversation"
-
  export const Conversation = async(req:Request, res:Response)=>{
    try{
     const newConversation = await ConversationModel.create({
@@ -9,7 +8,7 @@ import ConversationModel from "../models/Conversation"
     if(newConversation){
         res.status(200).send(newConversation)
     }
-   }catch(err){
+   }catch(err: any){
         res.status(500).send(err.message)
    }
  }
@@ -23,7 +22,7 @@ import ConversationModel from "../models/Conversation"
             if(conversation)
             res.status(200).send(conversation)    
             }
-    catch(err){
+    catch(err: any){
             res.status(500).send(err.message)
     }
  }

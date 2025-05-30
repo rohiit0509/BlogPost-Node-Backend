@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import getDataModel from "../models/getData";
+import getDataModel from "../src/models/getData";
 
 export const ShowComments = async (req: Request, res: Response) => {
   const postId = req.params.id;

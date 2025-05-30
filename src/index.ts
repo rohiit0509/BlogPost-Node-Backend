@@ -1,27 +1,27 @@
 import express from "express";
-import userRouter from "../routes/userRoute";
-import postRouter from "../routes/postRoute";
+import userRouter from "./routes/userRoute";
+import postRouter from "./routes/postRoute";
 import cookieParser from "cookie-parser";
-import { getData } from "../controllers/getData";
-import { sendData } from "../controllers/sendData";
-import { userValidator } from "../middleware/userValidator";
-import { upload } from "../multer/index";
-import { imageURl } from "../controllers/imageURl";
-import { fetchBlog } from "../controllers/fetchBlog";
-import { likeOnPost } from "../controllers/likeOnPost";
-import { getUserDetail } from "../controllers/getUserDetail";
-import { GetAllUsers } from "../controllers/getAllUsers";
-import { Conversation } from "../controllers/Conversation";
-import { GetConversation } from "../controllers/Conversation";
-import { Message } from "../controllers/Message";
-import { GetMessage } from "../controllers/Message";
+import { getData } from "./controllers/getData";
+import { sendData } from "./controllers/sendData";
+import { userValidator } from "./middleware/userValidator";
+import { upload } from "./multer/index";
+import { imageURl } from "./controllers/imageURl";
+import { fetchBlog } from "./controllers/fetchBlog";
+import { likeOnPost } from "./controllers/likeOnPost";
+import { getUserDetail } from "./controllers/getUserDetail";
+import { GetAllUsers } from "./controllers/getAllUsers";
+import { Conversation } from "./controllers/Conversation";
+import { GetConversation } from "./controllers/Conversation";
+import { Message } from "./controllers/Message";
+import { GetMessage } from "./controllers/Message";
 import cors from "cors";
 import http from "http";
-import { socketSetup } from "../socket"; // Import socket setup
+import { socketSetup } from "./socket";
 import { Server } from 'socket.io';
 
 const app = express();
-const server = http.createServer(app); // HTTP server to work with socket.io
+const server = http.createServer(app);
 
 app.use(express.json());
 

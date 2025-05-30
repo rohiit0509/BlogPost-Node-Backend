@@ -1,5 +1,5 @@
 import {Response, Request} from "express"
-import User from "../models/user";
+import User from "../src/models/user";
 export const getUserDetail = async(req:Request, res:Response) => {
   try{
     const userId= req.body.userId;

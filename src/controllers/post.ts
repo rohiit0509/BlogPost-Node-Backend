@@ -1,4 +1,4 @@
-import PostModel from "../models/post";
+import PostModel from "../src/models/post";
 import { Request, Response } from "express";
 
 export const CreatePost = async (req: any, res: Response) => {

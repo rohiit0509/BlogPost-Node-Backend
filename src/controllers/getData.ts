@@ -1,5 +1,5 @@
 import {Response, Request} from "express"
-import getDataModel from "../models/getData"
+import getDataModel from "../src/models/getData"
 import { v2 as cloudinary} from "cloudinary"
 
 cloudinary.config({ 

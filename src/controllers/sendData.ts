@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import getDataModel from "../models/getData";
+import getDataModel from "../src/models/getData";
 
 export const sendData = async (req: Request, res: Response) => {
     try {
