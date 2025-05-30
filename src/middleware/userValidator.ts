@@ -4,6 +4,7 @@ const secretKey = "rohit123";
 
 export const userValidator = (req: Request, res: Response, next: NextFunction): void => {
   const token = req.cookies.userAuth;
+  console.log('token',token);
   
   if (!token) {
     res.status(401).send("Access Denied");
