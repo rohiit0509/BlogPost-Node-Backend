@@ -26,7 +26,7 @@ const server = http.createServer(app);
 app.use(express.json());
 
 const corsOptions = {
-  origin: '*',
+  origin: 'https://blog-post-react-frontend-sigma.vercel.app/',
   credentials: true,
   optionSuccessStatus: 200
 };
