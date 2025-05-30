@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import getDataModel from "../src/models/getData";
+import getDataModel from "../models/getData";
 
 export const fetchBlog = async (req: Request, res: Response) => {
   // const body= req.body.userId;

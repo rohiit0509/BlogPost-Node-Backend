@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import MessageModel from "../src/models/Message" 
+import MessageModel from "../models/Message" 
 
  export const Message = async(req:Request, res:Response)=>{
    try{
