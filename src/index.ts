@@ -24,9 +24,20 @@ const app = express();
 const server = http.createServer(app);
 
 app.use(express.json());
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "https://blog-post-react-frontend-sigma.vercel.app"
+];
 
 const corsOptions = {
-  origin: 'https://blog-post-react-frontend-sigma.vercel.app',
+  origin: (origin: any, callback: any) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
   optionSuccessStatus: 200
 };
@@ -37,8 +48,10 @@ app.use(cors(corsOptions));
 // Socket setup
 const io = new Server(server, {
   cors: {
-   origin: "https://blog-post-react-frontend-sigma.vercel.app",
-    methods: ["GET", "POST", "PATCH"]
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PATCH"],
+    credentials: true
+
   }
 });
 
